@@ -1,0 +1,16 @@
+PODS:
+  - ALEither (0.1.0)
+
+DEPENDENCIES:
+  - ALEither (from `../`)
+
+EXTERNAL SOURCES:
+  ALEither:
+    :path: ../
+
+SPEC CHECKSUMS:
+  ALEither: d984a8901ac3392f2bcac18883ae7460f2ebef30
+
+PODFILE CHECKSUM: 97ffe37d76618888e87fc2f73bd5f7f7bf804e9e
+
+COCOAPODS: 1.2.0
