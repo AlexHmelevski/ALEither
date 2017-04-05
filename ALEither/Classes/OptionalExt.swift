@@ -44,7 +44,7 @@ extension Optional {
     ///   - work: block of work with value
     /// - Returns: unmodified Wrapped?
     @discardableResult
-    public func `do`(onQueue queue: DispatchQueue? = nil, work:  @escaping (Wrapped) -> Void) -> Wrapped? {
+    public func `do`(on queue: DispatchQueue? = nil, work:  @escaping (Wrapped) -> Void) -> Wrapped? {
         if case .some(let val) = self {
             performWork(onQueue: queue, work: { work(val) })
         }
@@ -56,7 +56,7 @@ extension Optional {
     /// - Parameter work: Block of work
     /// - Returns: Wrapped?
     @discardableResult
-    public func doIfNone(onQueue queue: DispatchQueue? = nil, work: @escaping () -> Void) -> Wrapped? {
+    public func doIfNone(on queue: DispatchQueue? = nil, work: @escaping () -> Void) -> Wrapped? {
         if case .none = self {
             performWork(onQueue: queue, work: { work() })
         }

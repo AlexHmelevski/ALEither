@@ -10,6 +10,11 @@ import XCTest
 
 @testable import ALEither
 
+func currentQueueName() -> String? {
+    let name = __dispatch_queue_get_label(nil)
+    return String(cString: name, encoding: .utf8)
+}
+
 class OptionalExtensionTests: XCTestCase {
     
     var exp: XCTestExpectation!
@@ -27,6 +32,8 @@ class OptionalExtensionTests: XCTestCase {
     func test_take_if_returns_nil() {
         let d = Optional(2).take(if: { $0 < 0})
         XCTAssertNil(d)
+        
+        XCTAssertNil(Optional<Int>.none.take(if: {$0 > 0 }))
     }
     
     func test_take_if_with_default_returns_valid_data() {
@@ -51,6 +58,23 @@ class OptionalExtensionTests: XCTestCase {
         XCTAssertTrue(doCalled)
     }
     
+    func test_do_perform_work_on_expected_queue() {
+        var doCalled = false
+        let queue = DispatchQueue(label: "TestQ")
+        exp = expectation(description: "Test")
+        
+        Optional(2).do(on:queue, work: {_ in
+            doCalled = true
+            XCTAssertEqual(currentQueueName(), "TestQ")
+            self.exp.fulfill()
+        })
+        
+        waitForExpectations(timeout: 5) { (error) in
+            XCTAssertTrue(doCalled)
+        }
+        
+    }
+    
     func test_skip_perform_work() {
         var doCalled = false
         Optional<Int>.none.do(work: {_ in
@@ -62,11 +86,27 @@ class OptionalExtensionTests: XCTestCase {
     
     func test_doIfNone_perform_work() {
         var doCalled = false
-        Optional(2).doIfNone(work: {_ in
+        Optional<Int>.none.doIfNone(work: {_ in
             doCalled = true
         })
         
-       XCTAssertFalse(doCalled)
+       XCTAssertTrue(doCalled)
+    }
+    
+    func test_doIfNone_perform_work_on_expected_queue() {
+        var doCalled = false
+        let queue = DispatchQueue(label: "TestQ")
+        exp = expectation(description: "Test")
+        Optional<Int>.none.doIfNone(on:queue, work: {_ in
+            doCalled = true
+            XCTAssertEqual(currentQueueName(), "TestQ")
+            self.exp.fulfill()
+        })
+        
+        waitForExpectations(timeout: 5) { (error) in
+            XCTAssertTrue(doCalled)
+        }
+ 
     }
     
     func test_skipIfNone_perform_work() {

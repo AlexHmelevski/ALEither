@@ -18,8 +18,8 @@ public enum ALEither<R, E> {
         self = .right(value: value)
     }
     
-    init(error: E) {
-        self = .wrong(value: error)
+    init(wrong: E) {
+        self = .wrong(value: wrong)
     }
     
     init?(value: R?, error: E?) {
@@ -101,7 +101,7 @@ public enum ALEither<R, E> {
     ///   - work: block of work with value
     /// - Returns: unmodified ALEither
     @discardableResult
-    func `do`(onQueue queue: DispatchQueue? = nil, work:  @escaping (R) -> Void) -> ALEither<R, E> {
+    func `do`(on queue: DispatchQueue? = nil, work:  @escaping (R) -> Void) -> ALEither<R, E> {
         if case .right(let val) = self {
             performWork(onQueue: queue, work: { work(val) })
             
@@ -114,7 +114,7 @@ public enum ALEither<R, E> {
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
     @discardableResult
-    func doIfWrong(onQueue queue: DispatchQueue? = nil, work: @escaping  (E) -> Void) -> ALEither<R, E> {
+    func doIfWrong(on queue: DispatchQueue? = nil, work: @escaping  (E) -> Void) -> ALEither<R, E> {
         if case .wrong(let err) = self {
             performWork(onQueue: queue, work: { work(err) })
             
@@ -127,7 +127,7 @@ public enum ALEither<R, E> {
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
     @discardableResult
-    func doIfWrong<U: Error>(ofType type: U.Type, work: (U) -> Void) -> ALEither<R, E> {
+    func doIfWrong<U>(of type: U.Type, work: (U) -> Void) -> ALEither<R, E> {
         if case .wrong(let err) = self {
             if let e = err as? U {
                 work(e)
@@ -149,6 +149,13 @@ public enum ALEither<R, E> {
         return self
     }
     
+    func fork(right: ((R)->Void)?, wrong: ((E) -> Void)?) {
+        switch self {
+            case let .right(val): right?(val)
+            case let .wrong(val): wrong?(val)
+        }
+    }
+    
     /// Allows to provide default value in case of error
     ///
     /// - Parameter value: Default value
@@ -166,5 +173,5 @@ public enum ALEither<R, E> {
             .doIfNone(work:  work)
         
     }
-    
+ 
 }
