@@ -6,16 +6,6 @@
 //
 //
 
-import Foundation
-
-
-//
-//  OptionalExtension.swift
-//  MyWeatherApp
-//
-//  Created by Alex Hmelevski on 2017-02-01.
-//  Copyright © 2017 Alex Crow. All rights reserved.
-//
 
 import Foundation
 
@@ -23,10 +13,10 @@ extension Optional {
     
     /// Conditional function, returns Either with valid value according to predicate block
     /// If predicate false - returns nil
-    /// - Parameter predicate: Predicate
-    /// - Returns: ALEither<Right, Wrong>?
+    /// - Parameter predicate: (Wrapped) -> Bool
+    /// - Returns: Wrapped?
     
-    func take(if predicate: (Wrapped) -> Bool) -> Wrapped? {
+    public func take(if predicate: (Wrapped) -> Bool) -> Wrapped? {
         switch self {
             case .some(let val): return predicate(val) ? self : nil
             case .none: return self
@@ -36,11 +26,11 @@ extension Optional {
     /// Conditional check for Either returns current state if predicate true or default value
     ///
     /// - Parameters:
-    ///   - predicate: (Right) -> Bool
-    ///   - default: Default value
-    /// - Returns: ALEither<Right, Wrong>
+    ///   - predicate: (Wrapped) -> Bool
+    ///   - default: Wrapped
+    /// - Returns: Wrapped?
     
-    func take(if predicate: (Wrapped) -> Bool, default: Wrapped) -> Wrapped? {
+    public func take(if predicate: (Wrapped) -> Bool, default: Wrapped) -> Wrapped? {
         switch self {
             case .some(let val): return predicate(val) ? self : `default`
             case .none: return self
@@ -54,35 +44,21 @@ extension Optional {
     ///   - work: block of work with value
     /// - Returns: unmodified Wrapped?
     @discardableResult
-    func `do`(onQueue queue: DispatchQueue, work:  @escaping (Wrapped) -> Void) -> Wrapped? {
+    public func `do`(onQueue queue: DispatchQueue? = nil, work:  @escaping (Wrapped) -> Void) -> Wrapped? {
         if case .some(let val) = self {
             performWork(onQueue: queue, work: { work(val) })
         }
         return self
-    }
-    
-    /// Peform work on a chosen thread(asynchroniously) when a value is available
-    ///
-    /// - Parameters:
-    ///   - queue: Queue where to perform the block
-    ///   - work: block of work with value
-    /// - Returns: unmodified Wrapped?
-    @discardableResult
-    public func `do`( work: (Wrapped) -> Void) -> Wrapped? {
-        if case .some(let val) = self {
-            work(val)
-        }
-        return self
-    }
+    }    
     
     /// doNone function allows to perform some work if the result is none,
     ///
     /// - Parameter work: Block of work
     /// - Returns: Wrapped?
     @discardableResult
-    public func doIfNone(work: () -> Void) -> Wrapped? {
+    public func doIfNone(onQueue queue: DispatchQueue? = nil, work: @escaping () -> Void) -> Wrapped? {
         if case .none = self {
-            work()
+            performWork(onQueue: queue, work: { work() })
         }
         return self
     }
@@ -98,9 +74,9 @@ extension Optional {
     }
     
     @discardableResult
-    func debug(message: String? = nil) -> Wrapped? {
-        message.do(work: { print($0 + " " + "\(self)") })
-            .doIfNone(work: { print(self ?? "nil") })
+    public func debug(message: String? = nil) -> Wrapped? {
+        message.do(work: { debugPrint($0 + " " + "\(self)") })
+               .doIfNone(work: { debugPrint(self ?? "nil") })
         return self
     }
     
