@@ -109,7 +109,7 @@ public enum ALEither<R, E> {
         return self
     }
     
-    /// doOnError function allows to perform some work if the result is wrong,
+    /// doIfWrong function allows to perform some work if the result is wrong,
     ///
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
@@ -122,7 +122,7 @@ public enum ALEither<R, E> {
         return self
     }
     
-    /// doOnError function allows to perform some work if the result is wrong,
+    /// doIfWrong function allows to perform some work if the result is wrong,
     /// Does additional check for error types
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
@@ -137,7 +137,7 @@ public enum ALEither<R, E> {
         return self
     }
     
-    /// doOnError function allows to perform some work if the result is wrong,
+    /// doIfWrong function allows to perform some work if the result is wrong,
     ///
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
