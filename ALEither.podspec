@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
   Simple idea of Either monad implemented in Swift. Supports map,flatMap,fork etc
                        DESC
 
-  s.homepage         = 'https://github.com/AlexHmelevski/ALEither'
+  s.homepage         = 'https://github.com/AlexHmelevski/ALEither.git'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'AlexHmelevskiAG' => 'alexei.hmelevski@gmail.com' }
-  s.source           = { :git => 'https://github.com/AlexHmelevskiAG/ALEither.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/AlexHmelevski/ALEither.git', :tag => s.version.to_s }
 
 
   s.ios.deployment_target = '8.0'
