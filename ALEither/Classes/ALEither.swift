@@ -14,15 +14,15 @@ public enum ALEither<R, E> {
     case right(value: R)
     case wrong(value: E)
     
-    init(value: R) {
+    public init(value: R) {
         self = .right(value: value)
     }
     
-    init(wrong: E) {
+    public init(wrong: E) {
         self = .wrong(value: wrong)
     }
     
-    init?(value: R?, error: E?) {
+    public init?(value: R?, error: E?) {
         if let e = error {
             self = .wrong(value: e)
             return
@@ -41,7 +41,7 @@ public enum ALEither<R, E> {
     /// current state
     /// - Parameter transform: function to apply
     /// - Returns: ALEither<U, E>
-    func map<U>(transform: (R) -> U) -> ALEither<U, E> {
+    public func map<U>(transform: (R) -> U) -> ALEither<U, E> {
         switch self {
             case .right(let val): return .right(value: transform(val))
             case .wrong(let err): return .wrong(value: err)
@@ -53,7 +53,7 @@ public enum ALEither<R, E> {
     /// - Parameter predicate: Predicate
     /// - Returns: ALEither<R, E>?
     
-    func take(if predicate: (R) -> Bool) -> ALEither<R, E>? {
+    public func take(if predicate: (R) -> Bool) -> ALEither<R, E>? {
         switch self {
             case .right(let val): return predicate(val) ? self : nil
             case .wrong: return self
@@ -67,7 +67,7 @@ public enum ALEither<R, E> {
     ///   - default: Default value
     /// - Returns: ALEither<R, E>
     
-    func take(if predicate: (R) -> Bool, default: R) -> ALEither<R, E> {
+    public func take(if predicate: (R) -> Bool, default: R) -> ALEither<R, E> {
         switch self {
             case .right(let val): return predicate(val) ? self : .right(value: `default`)
             case .wrong: return self
@@ -80,14 +80,14 @@ public enum ALEither<R, E> {
     ///   - predicate: (Right) -> Bool
     ///   - default: Default error
     /// - Returns: ALEither<R, E>
-    func takeIf(predicate: (R) -> Bool, wrong: E) -> ALEither<R, E> {
+    public func takeIf(predicate: (R) -> Bool, wrong: E) -> ALEither<R, E> {
         switch self {
             case .right(let val): return predicate(val) ? self : .wrong(value: wrong)
             case .wrong: return self
         }
     }
     
-    func flatMap<U>(f: (R) -> ALEither<U, E>) -> ALEither<U, E> {
+    public func flatMap<U>(f: (R) -> ALEither<U, E>) -> ALEither<U, E> {
         switch self {
             case .right(let val): return  f(val)
             case .wrong(let err): return .wrong(value: err)
@@ -101,7 +101,7 @@ public enum ALEither<R, E> {
     ///   - work: block of work with value
     /// - Returns: unmodified ALEither
     @discardableResult
-    func `do`(on queue: DispatchQueue? = nil, work:  @escaping (R) -> Void) -> ALEither<R, E> {
+    public func `do`(on queue: DispatchQueue? = nil, work:  @escaping (R) -> Void) -> ALEither<R, E> {
         if case .right(let val) = self {
             performWork(onQueue: queue, work: { work(val) })
             
@@ -114,7 +114,7 @@ public enum ALEither<R, E> {
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
     @discardableResult
-    func doIfWrong(on queue: DispatchQueue? = nil, work: @escaping  (E) -> Void) -> ALEither<R, E> {
+    public func doIfWrong(on queue: DispatchQueue? = nil, work: @escaping  (E) -> Void) -> ALEither<R, E> {
         if case .wrong(let err) = self {
             performWork(onQueue: queue, work: { work(err) })
             
@@ -127,7 +127,7 @@ public enum ALEither<R, E> {
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
     @discardableResult
-    func doIfWrong<U>(of type: U.Type, work: (U) -> Void) -> ALEither<R, E> {
+    public func doIfWrong<U>(of type: U.Type, work: (U) -> Void) -> ALEither<R, E> {
         if case .wrong(let err) = self {
             if let e = err as? U {
                 work(e)
@@ -142,14 +142,14 @@ public enum ALEither<R, E> {
     /// - Parameter work: Block of work with error
     /// - Returns: ALEither<R, E>
     @discardableResult
-    func doIfWrong(if predicate: (E) -> Bool, work: (E) -> Void) -> ALEither<R, E> {
+    public func doIfWrong(if predicate: (E) -> Bool, work: (E) -> Void) -> ALEither<R, E> {
         if case .wrong(let err) = self {
             work(err)
         }
         return self
     }
     
-    func fork(right: ((R)->Void)?, wrong: ((E) -> Void)?) {
+    public func fork(right: ((R)->Void)?, wrong: ((E) -> Void)?) {
         switch self {
             case let .right(val): right?(val)
             case let .wrong(val): wrong?(val)
@@ -160,7 +160,7 @@ public enum ALEither<R, E> {
     ///
     /// - Parameter value: Default value
     /// - Returns: ALEither<Right>
-    func drive(value: R) -> ALEither<R, E> {
+    public func drive(value: R) -> ALEither<R, E> {
         if case .wrong = self {
             return .right(value: value)
         }
