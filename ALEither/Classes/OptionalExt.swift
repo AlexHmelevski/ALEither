@@ -9,6 +9,18 @@
 
 import Foundation
 
+infix operator »: transformOperator
+
+precedencegroup transformOperator {
+    associativity: left
+    
+}
+
+func »<T,U>(input: T, transform: (T) -> U) -> U {
+    return transform(input)
+}
+
+
 extension Optional {
     
     /// Conditional function, returns Either with valid value according to predicate block
