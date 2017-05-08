@@ -58,22 +58,6 @@ class OptionalExtensionTests: XCTestCase {
         XCTAssertTrue(doCalled)
     }
     
-    func test_do_perform_work_on_expected_queue() {
-        var doCalled = false
-        let queue = DispatchQueue(label: "TestQ")
-        exp = expectation(description: "Test")
-        
-        Optional(2).do(on:queue, work: {_ in
-            doCalled = true
-            XCTAssertEqual(currentQueueName(), "TestQ")
-            self.exp.fulfill()
-        })
-        
-        waitForExpectations(timeout: 5) { (error) in
-            XCTAssertTrue(doCalled)
-        }
-        
-    }
     
     func test_skip_perform_work() {
         var doCalled = false
@@ -93,21 +77,6 @@ class OptionalExtensionTests: XCTestCase {
        XCTAssertTrue(doCalled)
     }
     
-    func test_doIfNone_perform_work_on_expected_queue() {
-        var doCalled = false
-        let queue = DispatchQueue(label: "TestQ")
-        exp = expectation(description: "Test")
-        Optional<Int>.none.doIfNone(on:queue, work: {_ in
-            doCalled = true
-            XCTAssertEqual(currentQueueName(), "TestQ")
-            self.exp.fulfill()
-        })
-        
-        waitForExpectations(timeout: 5) { (error) in
-            XCTAssertTrue(doCalled)
-        }
- 
-    }
     
     func test_skipIfNone_perform_work() {
         var doCalled = false
