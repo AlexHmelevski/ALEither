@@ -1,9 +1,9 @@
 {
   "name": "ALEither",
-  "version": "0.1.0",
-  "summary": "A short description of ALEither.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/AlexHmelevskiAG/ALEither",
+  "version": "0.1.7",
+  "summary": "Either monad in swift",
+  "description": "Simple idea of Either monad implemented in Swift. Supports map,flatMap,fork etc",
+  "homepage": "https://github.com/AlexHmelevski/ALEither.git",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,11 +12,13 @@
     "AlexHmelevskiAG": "alexei.hmelevski@gmail.com"
   },
   "source": {
-    "git": "https://github.com/AlexHmelevskiAG/ALEither.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/AlexHmelevski/ALEither.git",
+    "tag": "0.1.7"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "11.0",
+    "tvos": "11.0"
   },
+  "swift_version": "5.0",
   "source_files": "ALEither/Classes/**/*"
 }

@@ -1,16 +1,16 @@
 PODS:
-  - ALEither (0.1.0)
+  - ALEither (0.1.7)
 
 DEPENDENCIES:
   - ALEither (from `../`)
 
 EXTERNAL SOURCES:
   ALEither:
-    :path: ../
+    :path: "../"
 
 SPEC CHECKSUMS:
-  ALEither: d984a8901ac3392f2bcac18883ae7460f2ebef30
+  ALEither: e3be076ab87886a8f1a0668042e95592d40d087f
 
 PODFILE CHECKSUM: 591d7e2ce8d79f89872bcc359e8af22f9b0ce69a
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.6.1
